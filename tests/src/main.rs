@@ -256,3 +256,34 @@ fn multiple_blocks() {
     assert!(did_while);
     assert!(did_if);
 }
+
+
+#[test]
+fn multiple_blocks2() {
+    block!{ 
+        let mut did_for = false;
+        let mut did_if = false;
+        let mut did_while = false;
+        for i in 0..3 match i { 
+            2 => { 
+                assert!(i < 3); 
+                did_for = true;
+            },
+            _ => assert!(i < 3) 
+        }
+        if true unsafe { 
+            let ref_: *const i32 = &32; 
+            did_if = *ref_ == 32
+        }
+        while let Some(x) = Some(32) match x { 
+            32 => { 
+                did_while = true; 
+                break; 
+            },
+            _ => assert!(false)  
+        }
+    }
+    assert!(did_for);
+    assert!(did_while);
+    assert!(did_if);
+}
