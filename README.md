@@ -11,11 +11,10 @@ fn multiple_blocks() {
         }
         async while cond {
             //...
-            break;
         }
-        if cond match 0 unsafe  {
-            0 => assert!(true),
-            _ => ()
+        if cond unsafe match 0 {
+            0 => //...,
+            _ => //...
         } else {
             //...
         }
