@@ -1,0 +1,11 @@
+[package]
+name = "block_effects_tests"
+version = "0.1.0"
+authors = ["mathijsd <mathijs.delabie@bricsys.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+block_effects = { path = ".." }
+futures = "0.3"
