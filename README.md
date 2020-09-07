@@ -1,5 +1,5 @@
 # block_effects
-Rust proc macro for chaining block effects such as unsafe, async, if, while, etc.
+Rust proc macro for chaining block effects such as unsafe, async, if, match, while, for and loop
 
 ## Example
 
@@ -9,11 +9,11 @@ fn multiple_blocks() {
         for i in 0..3 for j in 0..3 {
             //...
         }
-        while *cond* {
+        async while cond {
             //...
             break;
         }
-        if *cond* match 0 {
+        if cond match 0 unsafe  {
             0 => assert!(true),
             _ => ()
         } else {
