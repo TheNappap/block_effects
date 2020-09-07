@@ -12,7 +12,7 @@ fn multiple_blocks() {
         async while cond {
             //...
         }
-        if cond unsafe match 0 {
+        if cond unsafe match var {
             0 => //...,
             _ => //...
         } else {
