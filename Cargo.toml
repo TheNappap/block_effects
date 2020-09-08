@@ -6,7 +6,6 @@ edition = "2018"
 description = "A macro to chain block effects"
 readme = "README.md"
 repository = "https://github.com/TheNappap/block_effects"
-license-file = "LICENSE"
 license = "MIT"
 keywords = ["block", "effect", "indentation", "unsafe"]
 categories = ["rust-patterns"]
