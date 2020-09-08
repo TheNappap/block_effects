@@ -1,3 +1,27 @@
+//! With `block_effects`, it is possible to chain different block effects with the use of the `block!` macro.
+//!
+//! This idea was proposed by [mcy](https://internals.rust-lang.org/t/eliminating-seemingly-unnecessary-braces/12971).
+//! 
+//! # Goal
+//! The main purpose of this crate is to minimize indentation for nested blocks.
+//! Unfortunately proc macros also add indentation. 
+//! So to fully benefit from this one should not indent the `block!` macro or even put the macro braces on the same line as the block.
+//!
+//! # Example
+//!``` rust
+//! use block_effects::block;
+//!
+//! block!{
+//! if let Some(_) = Some(0) if let Some(_) = Some(0) {
+//!     assert!(true); 
+//! }
+//! }
+//!
+//! let _future = block!{ unsafe async for i in 0..3 match i { 
+//!     0..=2 => assert!(true),
+//!     _ => assert!(false)
+//! } };
+//!```
 
 extern crate proc_macro;
 use proc_macro::{TokenStream,TokenTree,Group,Delimiter};
@@ -65,6 +89,37 @@ fn expand_block(tokens: &Vec<TokenTree>) -> Vec<TokenTree> {
     tokens
 }
 
+/// The `block!` macro is used to mark blocks with chained block effects.
+///
+/// The following block effects can be chained:
+/// `unsafe`, `async`, `if`, `match`, `loop`, `while` and `for`.
+/// Additionally `if let` and `while let` are also possible.
+///
+/// # Remarks
+///
+/// Some combinations of chaining effects just don't work.
+/// Here are some exceptions to keep in mind:
+/// * Ignoring `unsafe`, an `async` should be in front of the chain, otherwise the returned `Future` can't be used.
+/// * A `match` should be the last in line, because the body of a `match` block is different.
+/// * An `else` block can only be used if the starting block effect is an `if`.
+///
+/// # Example
+/// An Example with an `if let`, `for`, `loop` and `match` effects:
+///``` rust
+/// use block_effects::block;
+///
+/// block!{
+///     if let Some(_) = Some(0) for i in 0..4 loop match i {
+///         0..=3 => { 
+///             assert!(true); 
+///             break;
+///         },
+///         _ => assert!(false)
+///     } else {
+///         assert!(false);
+///     }
+/// }
+///```
 #[proc_macro]
 pub fn block(tokens: TokenStream) -> TokenStream {
     tokens.into_iter().scan(Vec::new(), |state, token| {
